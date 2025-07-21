@@ -206,6 +206,12 @@ FRONTEND_URL=http://localhost:5173
 
 ## 開發工作流程
 
+### 開發注意事項
+
+- 每次修改後都要執行 npm run build 確保沒有問題
+- API的使用必須要呼叫 Context7，確保正確使用
+- 每個 task item完成後執行 npm run build 確保沒有問題, 若正確則勾選完成，並 git commit
+
 ### 設定新功能
 
 1. 在 `server/prisma/schema.prisma` 中新增資料庫架構變更
