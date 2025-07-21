@@ -229,6 +229,12 @@ FRONTEND_URL=http://localhost:5173
 - 遵循 RESTful API 設計原則
 - 使用 WebSocket 進行即時通訊
 
+### 開發注意事項
+
+- 每次修改後都要執行 npm run build 確保沒有問題
+- API的使用必須要呼叫 Context7，確保正確使用
+- 每個 task item完成後執行 npm run build 確保沒有問題, 若正確則勾選完成，並 git commit
+
 ## MCP 整合
 
 專案在 `.mcp.json` 中包含 Model Context Protocol 伺服器配置：
