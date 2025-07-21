@@ -10,7 +10,9 @@ import { WebSocketServer } from 'ws'
 dotenv.config()
 
 // 導入路由
-import { apiRouter } from './routes'
+import { apiRouter } from './routes';
+import projectsRouter from './routes/projects';
+import filesRouter from './routes/files';
 import { errorHandler } from './middleware/error-handler'
 import { notFoundHandler } from './middleware/not-found'
 
@@ -82,7 +84,9 @@ class Server {
    */
   private setupRoutes(): void {
     // API 路由
-    this.app.use('/api', apiRouter)
+    this.app.use('/api', apiRouter);
+    this.app.use('/api/projects', projectsRouter);
+    this.app.use('/api/files', filesRouter);
 
     // 404 處理
     this.app.use(notFoundHandler)

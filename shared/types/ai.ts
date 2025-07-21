@@ -15,6 +15,7 @@ export interface AIResponse {
   }
   model?: string
   finishReason?: string
+  toolCalls?: AIToolCall[]
 }
 
 export interface AIStreamChunk {
@@ -68,6 +69,7 @@ export interface AIGenerateOptions {
   topK?: number
   stream?: boolean
   systemPrompt?: string
+  tools?: AITool[]
 }
 
 export const AI_PROVIDERS = {
@@ -97,3 +99,34 @@ export const AI_MODELS = {
 } as const
 
 export type AIModel = typeof AI_MODELS[keyof typeof AI_MODELS]
+
+// AI 工具相關型別定義
+export interface AITool {
+  name: string
+  description: string
+  parameters: {
+    type: 'object'
+    properties: Record<string, any>
+    required?: string[]
+  }
+}
+
+export interface AIToolCall {
+  id: string
+  name: string
+  arguments: Record<string, any>
+}
+
+export interface AIToolResult {
+  toolCallId: string
+  result: any
+  error?: string
+}
+
+// 預定義工具類型
+export const AI_TOOLS = {
+  STR_REPLACE_EDITOR: 'str_replace_editor',
+  FILE_MANAGER: 'file_manager'
+} as const
+
+export type AIToolType = typeof AI_TOOLS[keyof typeof AI_TOOLS]

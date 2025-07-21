@@ -211,6 +211,7 @@ FRONTEND_URL=http://localhost:5173
 - 每次修改後都要執行 npm run build 確保沒有問題
 - API的使用必須要呼叫 Context7，確保正確使用
 - 每個 task item完成後執行 npm run build 確保沒有問題, 若正確則勾選完成，並 git commit
+- 開發時應先設計程式介面，接著先開發 test code 再回來修正程式，最後完成程式後要執行測試。
 
 ### 設定新功能
 

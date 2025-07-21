@@ -1,122 +1,100 @@
-import { Router } from 'express'
-import type { Request, Response } from 'express'
+
+// server/routes/projects.ts
+
+import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
+
+// 建立 Prisma 客戶端實例
+// 用於與資料庫進行互動
+const prisma = new PrismaClient();
+
+// 建立 Express 路由器實例
+// 用於定義專案相關的 API 路由
+const router = Router();
 
 /**
- * 專案管理相關路由
- * 處理專案的 CRUD 操作
+ * @swagger
+ * tags:
+ *   name: Projects
+ *   description: 專案管理 API
  */
-const projectsRouter = Router()
 
-// 獲取所有專案
-projectsRouter.get('/', async (_req: Request, res: Response) => {
+/**
+ * @swagger
+ * /api/projects:
+ *   get:
+ *     summary: 取得所有專案
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: 成功取得專案列表
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ */
+// GET /api/projects - 取得所有專案
+router.get('/', async (_req, res) => {
   try {
-    // TODO: 實現獲取專案列表邏輯
-    res.status(501).json({
-      success: false,
-      message: 'Get projects list not implemented yet',
-      data: null,
-    })
+    // 從資料庫中查詢所有專案
+    const projects = await prisma.project.findMany({
+      include: {
+        files: true, // 同時載入關聯的檔案
+      },
+    });
+    // 以 JSON 格式回傳專案列表
+    res.json(projects);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    // 處理錯誤情況
+    res.status(500).json({ error: '無法取得專案' });
   }
-})
+});
 
-// 創建新專案
-projectsRouter.post('/', async (_req: Request, res: Response) => {
+/**
+ * @swagger
+ * /api/projects:
+ *   post:
+ *     summary: 建立新專案
+ *     tags: [Projects]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: 專案建立成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ */
+// POST /api/projects - 建立新專案
+router.post('/', async (req, res) => {
   try {
-    // TODO: 實現創建專案邏輯
-    res.status(501).json({
-      success: false,
-      message: 'Create project not implemented yet',
-      data: null,
-    })
+    // 從請求主體中獲取專案名稱和描述
+    const { name, description } = req.body;
+    // 在資料庫中建立新專案
+    const newProject = await prisma.project.create({
+      data: {
+        name,
+        description,
+      },
+    });
+    // 以 201 Created 狀態碼回傳新建立的專案
+    res.status(201).json(newProject);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    // 處理錯誤情況
+    res.status(400).json({ error: '無法建立專案' });
   }
-})
+});
 
-// 獲取特定專案
-projectsRouter.get('/:id', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params
-    // TODO: 實現獲取特定專案邏輯
-    res.status(501).json({
-      success: false,
-      message: `Get project ${id} not implemented yet`,
-      data: null,
-    })
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
-  }
-})
-
-// 更新專案
-projectsRouter.put('/:id', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params
-    // TODO: 實現更新專案邏輯
-    res.status(501).json({
-      success: false,
-      message: `Update project ${id} not implemented yet`,
-      data: null,
-    })
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
-  }
-})
-
-// 刪除專案
-projectsRouter.delete('/:id', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params
-    // TODO: 實現刪除專案邏輯
-    res.status(501).json({
-      success: false,
-      message: `Delete project ${id} not implemented yet`,
-      data: null,
-    })
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
-  }
-})
-
-// 獲取專案檔案
-projectsRouter.get('/:id/files', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params
-    // TODO: 實現獲取專案檔案邏輯
-    res.status(501).json({
-      success: false,
-      message: `Get files for project ${id} not implemented yet`,
-      data: null,
-    })
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
-  }
-})
-
-export { projectsRouter }
+export default router;

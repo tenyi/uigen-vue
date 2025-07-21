@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { authRouter } from './auth'
-import { projectsRouter } from './projects'
-import { filesRouter } from './files'
+import projectsRouter from './projects';
+import filesRouter from './files';
 import { aiRouter } from './ai'
 import { usersRouter } from './users'
 

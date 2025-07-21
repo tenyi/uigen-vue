@@ -38,3 +38,5 @@ uploads/
 
 # Temporary files
 tmp_*
+
+/src/generated/prisma

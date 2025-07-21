@@ -1,4 +1,6 @@
-import type { AIMessage, AIResponse, AIStreamChunk, AIProviderConfig, AIGenerateOptions } from '@shared/types/ai'
+import type { AIMessage, AIResponse, AIStreamChunk, AIProviderConfig, AIGenerateOptions, AIToolCall, AIToolResult } from '@shared/types/ai'
+import { ToolManager } from './tools/tool-manager'
+import { VirtualFileSystem } from '../../../src/lib/file-system'
 
 /**
  * AI 提供者抽象基類
@@ -7,6 +9,7 @@ import type { AIMessage, AIResponse, AIStreamChunk, AIProviderConfig, AIGenerate
 export abstract class BaseAIProvider {
   protected config: AIProviderConfig
   protected isInitialized = false
+  protected toolManager: ToolManager | null = null
 
   constructor(config: AIProviderConfig) {
     this.config = config
@@ -64,6 +67,78 @@ export abstract class BaseAIProvider {
     if (!this.isInitialized) {
       throw new Error(`AI Provider ${this.config.name} is not initialized`)
     }
+  }
+
+  /**
+   * 設定工具管理器
+   * @param fileSystem 虛擬檔案系統實例
+   */
+  setToolManager(fileSystem: VirtualFileSystem): void {
+    this.toolManager = new ToolManager(fileSystem)
+  }
+
+  /**
+   * 獲取可用工具列表
+   */
+  getAvailableTools() {
+    return this.toolManager?.getAvailableTools() || []
+  }
+
+  /**
+   * 執行工具呼叫
+   * @param toolCalls 工具呼叫陣列
+   */
+  async executeTools(toolCalls: AIToolCall[]): Promise<AIToolResult[]> {
+    if (!this.toolManager) {
+      throw new Error('Tool manager not initialized')
+    }
+    
+    return await this.toolManager.executeTools(toolCalls)
+  }
+
+  /**
+   * 處理包含工具呼叫的回應
+   * @param response AI 回應
+   */
+  async processToolCalls(response: AIResponse): Promise<AIResponse> {
+    if (!response.toolCalls || response.toolCalls.length === 0) {
+      return response
+    }
+
+    try {
+      const toolResults = await this.executeTools(response.toolCalls)
+      
+      // 將工具結果添加到回應中
+      return {
+        ...response,
+        content: response.content + '\n\n' + this.formatToolResults(toolResults)
+      }
+    } catch (error) {
+      console.error('Error processing tool calls:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return {
+        ...response,
+        content: response.content + '\n\n工具執行時發生錯誤: ' + errorMessage
+      }
+    }
+  }
+
+  /**
+   * 格式化工具執行結果
+   * @param results 工具執行結果陣列
+   */
+  private formatToolResults(results: AIToolResult[]): string {
+    return results.map(result => {
+      if (result.error) {
+        return `工具執行錯誤 (${result.toolCallId}): ${result.error}`
+      }
+      
+      const resultStr = typeof result.result === 'object' 
+        ? JSON.stringify(result.result, null, 2)
+        : String(result.result)
+      
+      return `工具執行結果 (${result.toolCallId}):\n${resultStr}`
+    }).join('\n\n')
   }
 
   /**

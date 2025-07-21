@@ -5,6 +5,7 @@ import { OpenAIProvider } from './openai-provider'
 import { GoogleProvider } from './google-provider'
 import type { AIProviderConfig, AIProviderStatus, AIMessage, AIResponse, AIStreamChunk, AIGenerateOptions } from '@shared/types/ai'
 import { AI_PROVIDERS } from '@shared/types/ai'
+import { VirtualFileSystem } from '../../../src/lib/file-system'
 
 /**
  * AI 提供者管理器
@@ -14,6 +15,7 @@ export class AIProviderManager {
   private providers: Map<string, BaseAIProvider> = new Map()
   private providerStatus: Map<string, AIProviderStatus> = new Map()
   private defaultProvider: string | null = null
+  private fileSystem: VirtualFileSystem | null = null
 
   constructor() {
     console.log('🤖 AI Provider Manager initialized')
@@ -47,6 +49,11 @@ export class AIProviderManager {
 
       // 初始化提供者
       await provider.initialize()
+
+      // 如果有檔案系統，設定工具管理器
+      if (this.fileSystem) {
+        provider.setToolManager(this.fileSystem)
+      }
 
       // 註冊到管理器
       this.providers.set(config.id, provider)
@@ -272,5 +279,52 @@ export class AIProviderManager {
    */
   getAllProviderInfo(): AIProviderConfig[] {
     return Array.from(this.providers.values()).map(provider => provider.getInfo())
+  }
+
+  /**
+   * 設定虛擬檔案系統
+   * @param fileSystem 虛擬檔案系統實例
+   */
+  setFileSystem(fileSystem: VirtualFileSystem): void {
+    this.fileSystem = fileSystem
+    
+    // 為所有已註冊的提供者設定工具管理器
+    for (const provider of this.providers.values()) {
+      provider.setToolManager(fileSystem)
+    }
+    
+    console.log('🗂️ File system set for all AI providers')
+  }
+
+  /**
+   * 獲取健康的提供者
+   */
+  private getHealthyProvider(): BaseAIProvider | null {
+    // 優先使用預設提供者
+    if (this.defaultProvider) {
+      const provider = this.providers.get(this.defaultProvider)
+      const status = this.providerStatus.get(this.defaultProvider)
+      if (provider && status?.isHealthy) {
+        return provider
+      }
+    }
+
+    // 尋找其他健康的提供者
+    for (const [id, provider] of this.providers) {
+      const status = this.providerStatus.get(id)
+      if (status?.isHealthy) {
+        return provider
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * 獲取可用工具列表
+   */
+  getAvailableTools() {
+    const provider = this.getHealthyProvider()
+    return provider ? provider.getAvailableTools() : []
   }
 }

@@ -1,0 +1,56 @@
+// 專為 UIGen Vue 設計的 Prisma 資料庫架構
+// 版本: 1.0
+// 作者: Gemini
+
+// 資料來源設定
+// 使用 SQLite 作為本地開發資料庫
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Prisma 客戶端生成器設定
+// 啟用擴展的 whereUnique 功能
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
+}
+
+// 專案模型
+// 代表一個使用者建立的 UI 專案
+model Project {
+  // 專案唯一識別碼 (UUID)
+  id          String   @id @default(uuid())
+  // 專案名稱
+  name        String
+  // 專案建立時間
+  createdAt   DateTime @default(now())
+  // 專案最後更新時間
+  updatedAt   DateTime @updatedAt
+  // 專案描述 (可選)
+  description String?
+  // 專案下的檔案列表 (一對多關聯)
+  files       File[]
+}
+
+// 檔案模型
+// 代表專案中的一個檔案
+model File {
+  // 檔案唯一識別碼 (UUID)
+  id        String   @id @default(uuid())
+  // 檔案名稱 (包含路徑)
+  name      String
+  // 檔案內容
+  content   String
+  // 檔案建立時間
+  createdAt DateTime @default(now())
+  // 檔案最後更新時間
+  updatedAt DateTime @updatedAt
+  // 所屬專案的 ID
+  projectId String
+  // 所屬專案 (多對一關聯)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // 複合唯一約束，確保同一專案下檔案名稱唯一
+  @@unique([projectId, name])
+}
