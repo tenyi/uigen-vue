@@ -28,15 +28,17 @@ export interface ProjectFile {
   updatedAt: Date
 }
 
-export enum FileType {
-  VUE = 'vue',
-  TYPESCRIPT = 'ts',
-  JAVASCRIPT = 'js',
-  CSS = 'css',
-  HTML = 'html',
-  JSON = 'json',
-  MARKDOWN = 'md',
-}
+export const FileType = {
+  VUE: 'vue',
+  TYPESCRIPT: 'ts',
+  JAVASCRIPT: 'js',
+  CSS: 'css',
+  HTML: 'html',
+  JSON: 'json',
+  MARKDOWN: 'md'
+} as const
+
+export type FileType = typeof FileType[keyof typeof FileType]
 
 export interface AIProvider {
   id: string
