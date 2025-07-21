@@ -181,12 +181,14 @@ export function useFileSystem() {
 ## 環境變數
 
 ### 前端 (.env)
+
 ```env
 VITE_API_BASE_URL=http://localhost:3001
 VITE_WS_URL=ws://localhost:3001
 ```
 
 ### 後端 (.env)
+
 ```env
 # AI 提供者金鑰 (按優先順序)
 ANTHROPIC_API_KEY=your-anthropic-api-key-here    # 首選
@@ -234,6 +236,7 @@ FRONTEND_URL=http://localhost:5173
 - 每次修改後都要執行 npm run build 確保沒有問題
 - API的使用必須要呼叫 Context7，確保正確使用
 - 每個 task item完成後執行 npm run build 確保沒有問題, 若正確則勾選完成，並 git commit
+- 開發時應先設計程式介面，接著先開發 test code 再回來修正程式，最後完成程式後要執行測試。
 
 ## MCP 整合
 
@@ -278,11 +281,13 @@ FRONTEND_URL=http://localhost:5173
 為了生成 Vue 組件而非 React 組件，需要調整 AI 提示詞：
 
 ### 原始 React 提示詞模式
+
 ```
 生成一個 React 組件，使用 JSX 語法...
 ```
 
 ### Vue 版本提示詞模式
+
 ```
 生成一個 Vue 3 組件，使用 Single File Component (SFC) 格式，包含：
 - <template> 區塊使用 Vue 模板語法
@@ -302,21 +307,25 @@ FRONTEND_URL=http://localhost:5173
 ## 遷移策略
 
 ### 階段 1: 基礎架構
+
 - 設定 Vue 3 + Vite 專案
 - 建立 Express.js 後端
 - 實現基本的 Pinia stores
 
 ### 階段 2: 核心功能
+
 - 移植虛擬檔案系統
 - 實現聊天介面
 - 建立 Vue 組件預覽系統
 
 ### 階段 3: AI 整合
+
 - 移植 AI 提供者系統
 - 調整提示詞以生成 Vue 組件
 - 實現 WebSocket 串流
 
 ### 階段 4: 進階功能
+
 - 使用者認證與專案管理
 - 測試覆蓋率
 - 部署配置
