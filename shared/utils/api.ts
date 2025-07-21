@@ -9,7 +9,9 @@ import { API_VERSION, API_HEADERS } from '@shared/constants/api'
 export function buildApiUrl(
   endpoint: string,
   version: string = API_VERSION.CURRENT,
-  baseUrl: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
+  baseUrl: string = (typeof window !== 'undefined' && (window as any).__VITE_API_BASE_URL__) || 
+                   (typeof process !== 'undefined' && process.env.VITE_API_BASE_URL) || 
+                   'http://localhost:3001'
 ): string {
   // 移除端點開頭的斜線（如果有的話）
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint
