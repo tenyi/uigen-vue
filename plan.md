@@ -34,7 +34,7 @@
 - [x] **1-8** 設定 API 版本控制策略
 
 ### 階段 2: AI整合系統 (6-7天) - 提前至關鍵路徑
-- [ ] **2-1** 實現 AI 提供者管理系統 (`server/lib/provider.ts`)
+- [x] **2-1** 實現 AI 提供者管理系統 (`server/lib/ai/`)
 - [ ] **2-2** 整合 Anthropic Claude API (首要供應商)
 - [ ] **2-3** 整合 OpenAI GPT-4 API (備選方案1)
 - [ ] **2-4** 整合 Google Gemini API (備選方案2)
