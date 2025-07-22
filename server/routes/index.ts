@@ -18,29 +18,23 @@ apiRouter.get('/', (_req, res) => {
     version: 'v1',
     description: 'AI-powered Vue component generator API',
     endpoints: {
-      auth: '/api/v1/auth',
-      projects: '/api/v1/projects',
-      files: '/api/v1/files',
-      ai: '/api/v1/ai',
-      users: '/api/v1/users',
+      auth: '/api/auth',
+      projects: '/api/projects',
+      files: '/api/files',
+      ai: '/api/ai',
+      users: '/api/users',
     },
-    documentation: '/api/v1/docs',
+    documentation: '/api/docs',
     health: '/health',
     websocket: '/ws',
   })
 })
 
-// 版本化路由
-const v1Router = Router()
-
-// 註冊各個功能模組的路由
-v1Router.use('/auth', authRouter)
-v1Router.use('/projects', projectsRouter)
-v1Router.use('/files', filesRouter)
-v1Router.use('/ai', aiRouter)
-v1Router.use('/users', usersRouter)
-
-// 將 v1 路由掛載到主路由
-apiRouter.use('/v1', v1Router)
+// 直接掛載路由，不使用版本前綴
+apiRouter.use('/auth', authRouter)
+apiRouter.use('/projects', projectsRouter)
+apiRouter.use('/files', filesRouter)
+apiRouter.use('/ai', aiRouter)
+apiRouter.use('/users', usersRouter)
 
 export { apiRouter }

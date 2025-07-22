@@ -1,0 +1,38 @@
+# Your Project Rules Index
+description: 專案統一規則索引和AI協作系統
+alwaysApply: true
+---
+
+## 專案概述
+這是一個基於 Cursor IDE 和 AI 輔助開發的現代化專案管理系統。
+
+## ⚠️ 強制系統依賴
+因為啟用了 Serena 記憶系統，所有 AI 助手工作前必須：
+1. 啟動 Serena 系統 (`mcp_serena_initial_instructions`)
+2. 檢查項目狀態 (`mcp_serena_check_onboarding_performed`)
+3. 讀取相關記憶文件（根據任務需求）
+4. 確認工具權限後才能執行任務
+
+## 核心原則
+- **Always respond in target language** - 使用目標語言回應
+- **MANDATORY: Start with Serena system** - 必須先啟動 Serena 系統
+- **CRITICAL: Memory system dependency** - 依賴 Serena 記憶系統
+- **User-driven decisions** - 用戶主導決策方向
+- **AI handles execution** - AI 負責執行細節
+- **Practical focus** - 重點關注實用性和可操作性
+
+## 模組化架構說明
+1. **統一控制** - Index.mdc 作為唯一入口點
+2. **按需加載** - 專門規則根據任務上下文激活
+3. **Token 優化** - 最小化上下文，最大化 AI 效能
+4. **模組維護** - 易於更新和擴展的結構
+
+## 觸發機制設計
+根據專案需求設計觸發條件：
+- **明確指令觸發**：用戶明確要求時激活對應模組
+- **任務類型觸發**：根據任務類型自動載入相關規則
+- **文件類型觸發**：根據操作文件類型激活對應規則
+
+**Version: v1.0**
+**Last Updated: YYYY-MM-DD HH:MM:SS**
+

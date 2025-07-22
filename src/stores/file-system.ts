@@ -9,11 +9,16 @@ export const useFileSystemStore = defineStore('file-system', {
     vfs: new VirtualFileSystem(),
   }),
   getters: {
-    files: (state) => state.vfs.listFiles(),
+    files: (state) => state.vfs.listDirectory('/'),
   },
   actions: {
     createFile(path: string, content: string) {
-      this.vfs.writeFile(path, content);
+      // 檢查檔案是否存在，如果存在則更新，否則建立
+      try {
+        this.vfs.updateFile(path, content);
+      } catch (error) {
+        this.vfs.createFile(path, content);
+      }
     },
     readFile(path: string) {
       return this.vfs.readFile(path);

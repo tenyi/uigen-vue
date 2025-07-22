@@ -1,0 +1,18 @@
+# Core Development Standards
+description: 核心開發標準和程式碼規範
+alwaysApply: false
+---
+
+## 程式碼品質標準
+- 遵循語言最佳實踐
+- 使用有意義的變數名稱
+- 撰寫清晰的註解
+- 實施單元測試
+
+## 架構設計原則
+- 單一職責原則
+- 開放封閉原則
+- 依賴注入原則
+- 模組化設計
+
+**Version: v1.0**

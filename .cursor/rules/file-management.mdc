@@ -1,0 +1,16 @@
+# File Management Standards
+description: 文件管理標準和組織規範
+alwaysApply: false
+---
+
+## 文件組織結構
+- 按功能模組組織目錄
+- 使用描述性文件名
+- 維護清晰的文件層級
+
+## 文件命名規範
+- 使用一致的命名慣例
+- 包含版本資訊
+- 記錄創建和更新時間
+
+**Version: v1.0**

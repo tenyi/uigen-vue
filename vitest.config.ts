@@ -8,6 +8,11 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
+    // 為後端測試配置不同的環境
+    environmentMatchGlobs: [
+      ['tests/server/**', 'node'],
+      ['src/**', 'jsdom'],
+    ],
   },
   resolve: {
     alias: {

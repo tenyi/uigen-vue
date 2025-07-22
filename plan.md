@@ -58,13 +58,13 @@
 - [x] **3-4** 建立基礎 RESTful API 路由結構
 - [x] **3-5** 建立統一錯誤處理機制
 - [x] **3-6** 實現資料庫遷移策略
-- [ ] **3-7** 建立 API 文件自動生成 (Swagger)
-- [ ] **3-8** 實現後端單元測試 (Jest)
+- [x] **3-7** 建立 API 文件自動生成 (Swagger)
+- [x] **3-8** 實現後端單元測試 (Vitest)
 
 ### 階段 4: 前端核心架構 (4-5天)
 
 - [x] **4-1** 建立 Vue Router 4 路由配置 (`router/index.ts`)
-- [ ] **4-2** 建立 Pinia 檔案系統 store (`stores/file-system.ts`)
+- [x] **4-2** 建立 Pinia 檔案系統 store (`stores/file-system.ts`)
 - [ ] **4-3** 建立 Pinia 聊天 store (`stores/chat.ts`)
 - [ ] **4-4** 建立 Pinia 專案 store (`stores/project.ts`)
 - [ ] **4-5** 建立 API 客戶端與錯誤處理 (`src/lib/api.ts`)

@@ -11,10 +11,9 @@ dotenv.config()
 
 // 導入路由
 import { apiRouter } from './routes';
-import projectsRouter from './routes/projects';
-import filesRouter from './routes/files';
 import { errorHandler } from './middleware/error-handler'
 import { notFoundHandler } from './middleware/not-found'
+import { setupSwagger } from './lib/swagger'
 
 /**
  * UIGen Vue 後端伺服器
@@ -68,6 +67,20 @@ class Server {
     this.app.use(express.json({ limit: process.env.MAX_FILE_SIZE || '10mb' }))
     this.app.use(express.urlencoded({ extended: true, limit: process.env.MAX_FILE_SIZE || '10mb' }))
 
+    /**
+     * @swagger
+     * /health:
+     *   get:
+     *     summary: 服務健康檢查
+     *     tags: [System]
+     *     responses:
+     *       200:
+     *         description: 服務正常運行
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/HealthCheck'
+     */
     // 健康檢查端點
     this.app.get('/health', (_req, res) => {
       res.status(200).json({
@@ -83,10 +96,11 @@ class Server {
    * 設定路由
    */
   private setupRoutes(): void {
-    // API 路由
+    // 設定 Swagger API 文件
+    setupSwagger(this.app)
+
+    // API 路由 - 統一使用 apiRouter 管理所有路由
     this.app.use('/api', apiRouter);
-    this.app.use('/api/projects', projectsRouter);
-    this.app.use('/api/files', filesRouter);
 
     // 404 處理
     this.app.use(notFoundHandler)
